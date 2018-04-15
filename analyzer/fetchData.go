@@ -43,9 +43,8 @@ func GetParsedData(apiKey string) (map[string][]DailyStockData, error) {
 	if response.StatusCode != 200 {
 		if response.StatusCode == 400 {
 			return nil, errors.New("Unauthorized - check your API key")
-		} else {
-			return nil, errors.New("Non-200 response: " + strconv.Itoa(response.StatusCode))
 		}
+		return nil, errors.New("Non-200 response: " + strconv.Itoa(response.StatusCode))
 	}
 
 	// parse API response
@@ -93,7 +92,6 @@ func convertResponse(jsonResponse ApiResponse) map[string][]DailyStockData {
 			case "ticker":
 				s.Name = value.(string)
 			case "date":
-				//s.Date, _ = time.Parse("2006-01-02", value.(string))
 				s.Date = value.(string)
 			case "open":
 				s.Open = value.(float64)

@@ -23,3 +23,9 @@ type DailyStockData struct {
 	Close  float64
 	Volume float64
 }
+
+type AverageMonthlyPrices struct {
+	Month        string  `json:"month"`
+	AverageOpen  float64 `json:"average_open"`
+	AverageClose float64 `json:"average_close"`
+}
