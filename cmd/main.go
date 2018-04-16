@@ -14,6 +14,7 @@ func main() {
 	// parse command line input
 	apiKey := flag.String("apiKey", "apiKey", "Your Quandl API key")
 	maxDailyProfit := flag.Bool("maxDailyProfit", false, "Specifies whether to calculate maximum daily profit")
+	busiestDays := flag.Bool("busiestDays", false, "Specifies whether to calculate busiest days")
 	flag.Parse()
 
 	// call API to fetch and parse data
@@ -27,6 +28,9 @@ func main() {
 		// calculate maximum daily profit for each security
 		maximumDailyProfits := analyzer.CalcMaxDailyProfit(tickerMap)
 		outputResult(maximumDailyProfits)
+	} else if *busiestDays {
+		busiestDaysMap := analyzer.CalcBusiestDays(tickerMap)
+		outputResult(busiestDaysMap)
 	} else {
 		// calculate monthly open/close averages for each security
 		monthlyAverages := analyzer.CalcAverageMonthly(tickerMap)

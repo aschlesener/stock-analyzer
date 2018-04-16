@@ -62,3 +62,33 @@ func CalcMaxDailyProfit(tickerMap map[string][]DailyStockData) []MaxDailyProfit 
 
 	return dailyProfits
 }
+
+// CalcBusiestDays calculates the days where a security's volume was over 10% greater than the average volume for that security
+func CalcBusiestDays(tickerMap map[string][]DailyStockData) map[string]BusiestDays {
+	busiestDaysMap := make(map[string]BusiestDays)
+
+	for ticker, dailyDatas := range tickerMap {
+		var busiestDays BusiestDays
+
+		// calculate average volume for this security
+		volumeSum := 0.0
+		for _, dailyData := range dailyDatas {
+			volumeSum += dailyData.Volume
+		}
+		busiestDays.AverageVolume = volumeSum / float64(len(dailyDatas))
+
+		// find days where volume is over 10% greater than the average volume
+		days := make([]BusiestDay, 0)
+		threshold := (.10 * busiestDays.AverageVolume) + busiestDays.AverageVolume
+		for _, dailyData := range dailyDatas {
+			if dailyData.Volume > threshold {
+				day := BusiestDay{Date: dailyData.Date, Volume: dailyData.Volume}
+				days = append(days, day)
+			}
+		}
+		busiestDays.Days = days
+		busiestDaysMap[ticker] = busiestDays
+	}
+
+	return busiestDaysMap
+}

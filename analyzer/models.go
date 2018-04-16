@@ -35,3 +35,13 @@ type MaxDailyProfit struct {
 	Date   string  `json:"date"`
 	Profit float64 `json:"maxProfit"`
 }
+
+type BusiestDays struct {
+	AverageVolume float64      `json:"averageVolume"`
+	Days          []BusiestDay `json:"busiestDays"`
+}
+
+type BusiestDay struct {
+	Date   string  `json:"date"`
+	Volume float64 `json:"volume"`
+}
