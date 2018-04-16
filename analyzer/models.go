@@ -29,3 +29,9 @@ type AverageMonthlyPrices struct {
 	AverageOpen  float64 `json:"average_open"`
 	AverageClose float64 `json:"average_close"`
 }
+
+type MaxDailyProfit struct {
+	Ticker string  `json:"ticker"`
+	Date   string  `json:"date"`
+	Profit float64 `json:"maxProfit"`
+}

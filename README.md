@@ -23,5 +23,12 @@ go build
 ./cmd -apiKey="YOUR QUANDL API KEY HERE"
 ```
 
+By default, the average monthly open and close prices are displayed. To calculate the other available data, select one of the following flags:
+```
+-maxDailyProfit
+-busiestDays
+-biggestLoser
+```
+
 ## License
 MIT

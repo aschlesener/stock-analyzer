@@ -38,3 +38,27 @@ func CalcAverageMonthly(tickerMap map[string][]DailyStockData) map[string][]Aver
 	}
 	return tickerAveragesMap
 }
+
+// CalcMaxDailyProfit calculates the maximum daily profit for each security
+func CalcMaxDailyProfit(tickerMap map[string][]DailyStockData) []MaxDailyProfit {
+	dailyProfits := make([]MaxDailyProfit, 0)
+	for ticker, dailyDatas := range tickerMap {
+		maxDailyProfit := MaxDailyProfit{Ticker: ticker}
+
+		// find date that provides the maximum daily profit for buying high and selling low
+		maxProfit := 0.0
+		var maxProfitDate string
+		for _, dailyData := range dailyDatas {
+			dailyProfit := dailyData.High - dailyData.Low
+			if dailyProfit > maxProfit {
+				maxProfit = dailyProfit
+				maxProfitDate = dailyData.Date
+			}
+		}
+		maxDailyProfit.Profit = maxProfit
+		maxDailyProfit.Date = maxProfitDate
+		dailyProfits = append(dailyProfits, maxDailyProfit)
+	}
+
+	return dailyProfits
+}
