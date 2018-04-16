@@ -45,3 +45,8 @@ type BusiestDay struct {
 	Date   string  `json:"date"`
 	Volume float64 `json:"volume"`
 }
+
+type BiggestLoser struct {
+	Ticker          string `json:"ticker"`
+	NumberDaysLoser int64  `json:"numberDaysLoss"`
+}

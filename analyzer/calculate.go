@@ -92,3 +92,31 @@ func CalcBusiestDays(tickerMap map[string][]DailyStockData) map[string]BusiestDa
 
 	return busiestDaysMap
 }
+
+// CalcBiggestLoser caculates the security that had the most days where the closing price was less than the opening price
+func CalcBiggestLoser(tickerMap map[string][]DailyStockData) BiggestLoser {
+	losingDaysMap := make(map[string]int64)
+
+	// calculate number of loss days for each security
+	for ticker, dailyDatas := range tickerMap {
+		var numLossDays int64
+		for _, dailyData := range dailyDatas {
+			if dailyData.Close < dailyData.Open {
+				numLossDays++
+			}
+		}
+		losingDaysMap[ticker] = numLossDays
+	}
+
+	// determine which security had greatest number of loss days
+	var maxLossDays int64
+	var maxLossTicker string
+	for ticker, numLossDays := range losingDaysMap {
+		if numLossDays > maxLossDays {
+			maxLossDays = numLossDays
+			maxLossTicker = ticker
+		}
+	}
+
+	return BiggestLoser{Ticker: maxLossTicker, NumberDaysLoser: maxLossDays}
+}
