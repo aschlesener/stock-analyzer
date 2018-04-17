@@ -30,9 +30,11 @@ func main() {
 		maximumDailyProfits := analyzer.CalcMaxDailyProfit(tickerMap)
 		outputResult(maximumDailyProfits)
 	} else if *busiestDays {
+		// calculate days where security's volume is >10% greater than average
 		busiestDaysMap := analyzer.CalcBusiestDays(tickerMap)
 		outputResult(busiestDaysMap)
 	} else if *biggestLoser {
+		// calulate security with longest streak of losing days
 		loser := analyzer.CalcBiggestLoser(tickerMap)
 		outputResult(loser)
 	} else {
@@ -42,6 +44,7 @@ func main() {
 	}
 }
 
+// helper function to pretty-print JSON result to the command line
 func outputResult(input interface{}) {
 	b, err := json.MarshalIndent(input, "", "    ")
 	if err != nil {

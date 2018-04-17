@@ -88,6 +88,9 @@ func convertResponse(jsonResponse ApiResponse) map[string][]DailyStockData {
 		s := DailyStockData{}
 		for i, value := range data {
 			// match column with column name from column names given in API response
+			if i >= len(columnNames) {
+				continue
+			}
 			switch strings.ToLower(columnNames[i].Name) {
 			case "ticker":
 				s.Name = value.(string)
