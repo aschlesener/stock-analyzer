@@ -30,5 +30,15 @@ By default, the average monthly open and close prices are displayed. To calculat
 -biggestLoser
 ```
 
+### Tests
+First install the `testify` library: 
+
+`go get github.com/stretchr/testify`
+
+Then run tests:
+```
+cd analyzer
+go test -cover
+```
 ## License
 MIT
