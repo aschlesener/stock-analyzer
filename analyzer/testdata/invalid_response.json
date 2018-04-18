@@ -1,0 +1,6 @@
+{
+    "quandl_error": {
+    "code": "QESx08",
+    "message": "You cannot use dateker column as a filter."
+    }
+}

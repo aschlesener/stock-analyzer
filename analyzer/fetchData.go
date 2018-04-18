@@ -12,13 +12,13 @@ import (
 )
 
 const (
-	apiEndpoint      = "https://www.quandl.com/api/v3/datatables/WIKI/PRICES"
 	defaultStartDate = "2017-01-01"
 	defaultEndDate   = "2017-06-30"
 )
 
 var (
 	defaultTickers = []string{"COF", "GOOGL", "MSFT"}
+	apiEndpoint    = "https://www.quandl.com/api/v3/datatables/WIKI/PRICES"
 )
 
 // GetParsedData calls stock API to fetch data and returns parsed version of that data

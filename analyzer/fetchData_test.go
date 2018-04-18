@@ -1,6 +1,9 @@
 package analyzer
 
 import (
+	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -28,6 +31,61 @@ func TestConvertResponse(t *testing.T) {
 	assert.Equal(t, 87.79, convertedResponse["COF"][0].Low)
 	assert.Equal(t, 88.87, convertedResponse["COF"][0].Close)
 	assert.Equal(t, 3441067.0, convertedResponse["COF"][0].Volume)
+}
+
+func TestGetParsedData_Valid(t *testing.T) {
+	ts := loadTestServer("testdata/valid_response.json", http.StatusOK)
+	defer ts.Close()
+
+	// call GetParsedData and test expectations based on mocked response
+	result, err := GetParsedData("testKey")
+	assert.Nil(t, err)
+	assert.Equal(t, 3, len(result))
+	assert.Equal(t, 104, len(result["COF"]))
+	assert.Equal(t, 104, len(result["GOOGL"]))
+	assert.Equal(t, 104, len(result["MSFT"]))
+}
+
+func TestGetParsedData_Unauthorized(t *testing.T) {
+	ts := loadTestServer("", http.StatusBadRequest)
+	defer ts.Close()
+
+	// call GetParsedData and test expectations based on mocked response
+	_, err := GetParsedData("testKey")
+	assert.NotNil(t, err)
+	assert.Equal(t, "Unauthorized - check your API key", err.Error())
+}
+
+func TestGetParsedData_Invalid(t *testing.T) {
+	ts := loadTestServer("testdata/invalid_response.json", http.StatusUnprocessableEntity)
+	defer ts.Close()
+
+	// call GetParsedData and test expectations based on mocked response
+	_, err := GetParsedData("testKey")
+	assert.NotNil(t, err)
+	assert.Equal(t, "Non-200 response: 422", err.Error())
+}
+
+// spin up a test server to mock the API response
+func loadTestServer(dataFileName string, statusCode int) *httptest.Server {
+	var mockResponse string
+	if dataFileName != "" {
+		// load mock response from file
+		b, _ := ioutil.ReadFile(dataFileName)
+		mockResponse = string(b)
+	}
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(statusCode)
+		if dataFileName != "" {
+			w.Write([]byte(mockResponse))
+		}
+	}))
+
+	// now when apiEndpoint is called, it will hit the test server which returns a mocked response
+	apiEndpoint = ts.URL
+
+	return ts
 }
 
 func createSampleAPIResponse() ApiResponse {
